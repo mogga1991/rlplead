@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { EnrichedLead } from '@/lib/types';
-import { ChevronUp, ChevronDown, Loader2, TrendingUp, Star } from 'lucide-react';
+import { ChevronUp, ChevronDown, Loader2, TrendingUp, Star, Bookmark, BookmarkCheck } from 'lucide-react';
 
 interface ResultsTableProps {
   leads: EnrichedLead[];
@@ -26,6 +27,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [sortField, setSortField] = useState<SortField>('score');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [savingLeads, setSavingLeads] = useState<Set<string>>(new Set());
+  const [savedLeads, setSavedLeads] = useState<Set<string>>(new Set());
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -52,6 +55,72 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
       newSelected.add(uei);
     }
     setSelectedRows(newSelected);
+  };
+
+  const handleSaveLead = async (lead: EnrichedLead, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+
+    const companyId = lead.company.uei || `company-${lead.company.companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+    // Mark as saving
+    setSavingLeads(prev => new Set(prev).add(companyId));
+
+    try {
+      const response = await fetch('/api/saved-leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyId,
+          userId: 'user-admin-default',
+          listName: 'GSA Lessors',
+          tags: ['GSA', 'Real Estate', 'Search Result'],
+          status: 'new',
+          priority: lead.salesIntelligence.opportunityScore >= 50 ? 'high' : 'medium',
+          notes: `Saved from search - ${lead.company.companyName} with $${(lead.company.totalAwards / 1000000).toFixed(1)}M in lease value`,
+        }),
+      });
+
+      if (response.ok) {
+        // Mark as saved
+        setSavedLeads(prev => new Set(prev).add(companyId));
+      } else {
+        console.error('Failed to save lead');
+        alert('Failed to save lead. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error saving lead:', error);
+      alert('Error saving lead. Please try again.');
+    } finally {
+      // Remove from saving state
+      setSavingLeads(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(companyId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleSaveSelected = async () => {
+    const selectedLeads = leads.filter(lead =>
+      selectedRows.has(lead.company.uei) &&
+      !savedLeads.has(lead.company.uei || `company-${lead.company.companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+    );
+
+    if (selectedLeads.length === 0) {
+      alert('No new leads selected to save.');
+      return;
+    }
+
+    if (!confirm(`Save ${selectedLeads.length} selected lead(s)?`)) {
+      return;
+    }
+
+    // Save all selected leads
+    for (const lead of selectedLeads) {
+      await handleSaveLead(lead);
+    }
+
+    alert(`Successfully saved ${selectedLeads.length} lead(s)!`);
   };
 
   // Sort leads
@@ -237,6 +306,9 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Lease States
               </th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -359,6 +431,28 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                       )}
                     </div>
                   </td>
+
+                  {/* Actions - Save Button */}
+                  <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                    {(() => {
+                      const companyId = lead.company.uei || `company-${lead.company.companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+                      const isSaving = savingLeads.has(companyId);
+                      const isSaved = savedLeads.has(companyId);
+
+                      return (
+                        <Button
+                          variant={isSaved ? "default" : "outline"}
+                          size="sm"
+                          icon={isSaved ? BookmarkCheck : Bookmark}
+                          onClick={(e) => !isSaved && handleSaveLead(lead, e)}
+                          disabled={isSaving || isSaved}
+                          className={isSaved ? "bg-fed-green-700 text-white hover:bg-fed-green-800" : ""}
+                        >
+                          {isSaving ? 'Saving...' : isSaved ? 'Saved' : 'Save'}
+                        </Button>
+                      );
+                    })()}
+                  </td>
                 </tr>
               );
             })}
@@ -374,9 +468,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               Showing <span className="font-semibold">{leads.length}</span> companies
             </div>
             {selectedRows.size > 0 && (
-              <div className="text-sm text-fed-green-700">
-                <span className="font-semibold">{selectedRows.size}</span> selected
-              </div>
+              <>
+                <div className="text-sm text-fed-green-700">
+                  <span className="font-semibold">{selectedRows.size}</span> selected
+                </div>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={Bookmark}
+                  onClick={handleSaveSelected}
+                >
+                  Save Selected ({selectedRows.size})
+                </Button>
+              </>
             )}
             <div className="text-xs text-gray-500">
               Total value: ${(leads.reduce((sum, l) => sum + l.company.totalAwards, 0) / 1000000).toFixed(1)}M
