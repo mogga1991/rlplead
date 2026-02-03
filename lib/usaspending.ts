@@ -108,7 +108,7 @@ export async function searchContractors(
         'Infrastructure Outlays',
       ],
       page: 1,
-      limit: 500, // Increased to get more comprehensive data
+      limit: 100, // API maximum
       order: 'desc',
       sort: 'Award Amount',
     };
@@ -123,10 +123,16 @@ export async function searchContractors(
       ];
     } else {
       const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth(); // 0-indexed (0 = Jan, 9 = Oct)
+
+      // Use last complete fiscal year to avoid querying future dates
+      // Fiscal year ends Sept 30, so if we're before Oct, use previous year
+      const fiscalYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
+
       searchParams.filters!.time_period = [
         {
-          start_date: `${currentYear - 3}-10-01`, // 3 years of data
-          end_date: `${currentYear}-09-30`,
+          start_date: `${fiscalYear - 4}-10-01`, // 3 fiscal years of data
+          end_date: `${fiscalYear - 1}-09-30`,   // End at last complete fiscal year
         },
       ];
     }

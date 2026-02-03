@@ -1,0 +1,19 @@
+🚀 Testing basic search functionality...
+
+📍 Navigating to https://rlplead.vercel.app...
+Browser: Failed to load resource: the server responded with a status of 404 ()
+🔍 Clicking "Find Lessors" button...
+⏳ Waiting 60 seconds for results...
+
+📡 API Response: 500
+Browser: Failed to load resource: the server responded with a status of 500 ()
+Browser: Search error: Error: Failed to search contractors
+    at j (https://rlplead.vercel.app/_next/static/chunks/app/page-7e4433d34d03df79.js?dpl=dpl_Fxrnkj59kwgvMDxeryKiBogNyuU8:1:16312)
+API Data: {
+  "error": "Failed to search contractors"
+}
+
+❌ Search returned "No GSA lessors found"
+
+🖼️  Taking screenshot...
+Screenshot saved to output/search-result.png

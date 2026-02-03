@@ -1,0 +1,1205 @@
+{
+  "generatedAt": "2026-02-03T02:23:45.884Z",
+  "searchCriteria": {
+    "agency": "General Services Administration",
+    "pscCodes": [
+      "X1AA",
+      "X1AB",
+      "X1AZ",
+      "X1FA",
+      "X1JZ",
+      "X1ND"
+    ],
+    "naicsCodes": [
+      "531110",
+      "531120",
+      "531130",
+      "531190",
+      "531210",
+      "531311",
+      "531312",
+      "531320"
+    ],
+    "timePeriod": {
+      "start_date": "2021-10-01",
+      "end_date": "2024-09-30"
+    }
+  },
+  "totalCompanies": 27,
+  "totalLeases": 30,
+  "companies": [
+    {
+      "companyName": "CENTRE MARKET BUILDING LLC",
+      "uei": "GVE8NMRZDMP6",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 3005384.33,
+      "numberOfLeases": 2,
+      "leases": [
+        {
+          "awardId": "47PC0722P0004",
+          "description": null,
+          "amount": 2295278.22,
+          "startDate": "2022-08-31",
+          "endDate": "2023-08-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NJ"
+        },
+        {
+          "awardId": "47PC0722P0005",
+          "description": null,
+          "amount": 710106.11,
+          "startDate": "2022-08-31",
+          "endDate": "2023-08-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NJ"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NJ"
+      ],
+      "largestLease": 2295278.22,
+      "mostRecentLease": {
+        "awardId": "47PC0722P0004",
+        "description": null,
+        "amount": 2295278.22,
+        "startDate": "2022-08-31",
+        "endDate": "2023-08-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NJ"
+      }
+    },
+    {
+      "companyName": "INTEGRATED MODULAR SOLUTIONS, LLC",
+      "uei": "MV22KVPV8DT5",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 2609963.37,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47QFSA18C0018",
+          "description": null,
+          "amount": 2609963.37,
+          "startDate": "2018-09-30",
+          "endDate": "2024-09-27",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "FL"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "FL"
+      ],
+      "largestLease": 2609963.37,
+      "mostRecentLease": {
+        "awardId": "47QFSA18C0018",
+        "description": null,
+        "amount": 2609963.37,
+        "startDate": "2018-09-30",
+        "endDate": "2024-09-27",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "FL"
+      }
+    },
+    {
+      "companyName": "RXR SL REIT LLC",
+      "uei": "E1U7M1QKEX34",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 1688090,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0623P0001",
+          "description": null,
+          "amount": 1688090,
+          "startDate": "2022-10-01",
+          "endDate": "2024-05-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 1688090,
+      "mostRecentLease": {
+        "awardId": "47PC0623P0001",
+        "description": null,
+        "amount": 1688090,
+        "startDate": "2022-10-01",
+        "endDate": "2024-05-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "INTER AMERICAN UNIVERSITY OF PUERTO RICO INC",
+      "uei": "KBLPFKKQMJ87",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 441337.52,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0723C0001",
+          "description": null,
+          "amount": 441337.52,
+          "startDate": "2023-09-11",
+          "endDate": "2024-01-08",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 441337.52,
+      "mostRecentLease": {
+        "awardId": "47PC0723C0001",
+        "description": null,
+        "amount": 441337.52,
+        "startDate": "2023-09-11",
+        "endDate": "2024-01-08",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "CITY VIEW PLAZA, LLC",
+      "uei": "GG2LFCHB2JU4",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 152027.58,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0111",
+          "description": null,
+          "amount": 152027.58,
+          "startDate": "2021-10-01",
+          "endDate": "2022-12-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 152027.58,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0111",
+        "description": null,
+        "amount": 152027.58,
+        "startDate": "2021-10-01",
+        "endDate": "2022-12-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "ORION MALONE NY LLC",
+      "uei": "XK6WXPV1KQE5",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 67500,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0822C0001",
+          "description": null,
+          "amount": 67500,
+          "startDate": "2022-06-28",
+          "endDate": "2022-09-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 67500,
+      "mostRecentLease": {
+        "awardId": "47PC0822C0001",
+        "description": null,
+        "amount": 67500,
+        "startDate": "2022-06-28",
+        "endDate": "2022-09-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "I 290 COLVIN ASSOC LLC",
+      "uei": "GZS5X6J7C4A7",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 53904,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0104",
+          "description": null,
+          "amount": 53904,
+          "startDate": "2022-05-09",
+          "endDate": "2022-07-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 53904,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0104",
+        "description": null,
+        "amount": 53904,
+        "startDate": "2022-05-09",
+        "endDate": "2022-07-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "CL SUMMIT CHAPPAQUA HOLDCO LLC",
+      "uei": "M7BVUA8MGB55",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 52517.24,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0422P0013",
+          "description": null,
+          "amount": 52517.24,
+          "startDate": "2022-06-23",
+          "endDate": "2023-11-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 52517.24,
+      "mostRecentLease": {
+        "awardId": "47PC0422P0013",
+        "description": null,
+        "amount": 52517.24,
+        "startDate": "2022-06-23",
+        "endDate": "2023-11-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "ISKALO ELECTRIC TOWER MASTER TENANT LLC",
+      "uei": "FMUJFL1VULG9",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 52352.67,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0118",
+          "description": null,
+          "amount": 52352.67,
+          "startDate": "2022-06-07",
+          "endDate": "2022-09-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 52352.67,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0118",
+        "description": null,
+        "amount": 52352.67,
+        "startDate": "2022-06-07",
+        "endDate": "2022-09-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "MILLENNIUM PARK PLAZA ASSOCIATES S, EN C. POR A., S.E.",
+      "uei": "EA4BD7261DA6",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 44390.64,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0028",
+          "description": null,
+          "amount": 44390.64,
+          "startDate": "2021-10-01",
+          "endDate": "2021-12-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 44390.64,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0028",
+        "description": null,
+        "amount": 44390.64,
+        "startDate": "2021-10-01",
+        "endDate": "2021-12-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "GA INVESTORS SE",
+      "uei": "J8CMA4RN7CY5",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 43554,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0126",
+          "description": null,
+          "amount": 43554,
+          "startDate": "2022-07-11",
+          "endDate": "2023-04-11",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 43554,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0126",
+        "description": null,
+        "amount": 43554,
+        "startDate": "2022-07-11",
+        "endDate": "2023-04-11",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "CVD MAIN LLC",
+      "uei": "QJLMK7K32NL5",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 40000,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0051",
+          "description": null,
+          "amount": 40000,
+          "startDate": "2021-10-01",
+          "endDate": "2022-12-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 40000,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0051",
+        "description": null,
+        "amount": 40000,
+        "startDate": "2021-10-01",
+        "endDate": "2022-12-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "EGP 130 BUFFALO LLC",
+      "uei": "FML3F3PRUTC4",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 37063.509999999995,
+      "numberOfLeases": 2,
+      "leases": [
+        {
+          "awardId": "47PC0123P0031",
+          "description": null,
+          "amount": 3114.91,
+          "startDate": "2023-03-31",
+          "endDate": "2023-05-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        },
+        {
+          "awardId": "47PC0522P0150",
+          "description": null,
+          "amount": 33948.6,
+          "startDate": "2022-09-14",
+          "endDate": "2023-04-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 33948.6,
+      "mostRecentLease": {
+        "awardId": "47PC0123P0031",
+        "description": null,
+        "amount": 3114.91,
+        "startDate": "2023-03-31",
+        "endDate": "2023-05-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "INMOBILIARIA WITOCHE, LLC",
+      "uei": "V8FGYM19V489",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 31669.66,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0032",
+          "description": null,
+          "amount": 31669.66,
+          "startDate": "2021-10-01",
+          "endDate": "2022-09-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 31669.66,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0032",
+        "description": null,
+        "amount": 31669.66,
+        "startDate": "2021-10-01",
+        "endDate": "2022-09-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "500 NEW KARNER ROAD LLC",
+      "uei": "DCRQPLL4MJ46",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 24440,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0123P0009",
+          "description": null,
+          "amount": 24440,
+          "startDate": "2022-12-15",
+          "endDate": "2023-09-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 24440,
+      "mostRecentLease": {
+        "awardId": "47PC0123P0009",
+        "description": null,
+        "amount": 24440,
+        "startDate": "2022-12-15",
+        "endDate": "2023-09-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "CTP PLAZA LLC",
+      "uei": "XYP5KHN74LN8",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 20869.05,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0012",
+          "description": null,
+          "amount": 20869.05,
+          "startDate": "2021-10-01",
+          "endDate": "2022-11-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 20869.05,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0012",
+        "description": null,
+        "amount": 20869.05,
+        "startDate": "2021-10-01",
+        "endDate": "2022-11-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "RXR 32 OLD SLIP REIT LLC",
+      "uei": "L5UFKZ3KQ8Z9",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 20400,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0423P0002",
+          "description": null,
+          "amount": 20400,
+          "startDate": "2022-10-01",
+          "endDate": "2023-12-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 20400,
+      "mostRecentLease": {
+        "awardId": "47PC0423P0002",
+        "description": null,
+        "amount": 20400,
+        "startDate": "2022-10-01",
+        "endDate": "2023-12-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "M2 CHANDLER TENANT LLC",
+      "uei": "Z16HH2ZZXBD8",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 13367.2,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47QMCA24P0004",
+          "description": null,
+          "amount": 13367.2,
+          "startDate": "2023-12-21",
+          "endDate": "2023-12-21",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "AZ"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "AZ"
+      ],
+      "largestLease": 13367.2,
+      "mostRecentLease": {
+        "awardId": "47QMCA24P0004",
+        "description": null,
+        "amount": 13367.2,
+        "startDate": "2023-12-21",
+        "endDate": "2023-12-21",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "AZ"
+      }
+    },
+    {
+      "companyName": "BUFFALO NY I FGF LLC",
+      "uei": "HL9UW49AKKD3",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 11041.5,
+      "numberOfLeases": 2,
+      "leases": [
+        {
+          "awardId": "47PC0123P0041",
+          "description": null,
+          "amount": 8684,
+          "startDate": "2023-05-05",
+          "endDate": "2023-08-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        },
+        {
+          "awardId": "47PC0123P0013",
+          "description": null,
+          "amount": 2357.5,
+          "startDate": "2023-03-02",
+          "endDate": "2023-07-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 8684,
+      "mostRecentLease": {
+        "awardId": "47PC0123P0041",
+        "description": null,
+        "amount": 8684,
+        "startDate": "2023-05-05",
+        "endDate": "2023-08-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "TAHA, ABDALLAH",
+      "uei": "WXYWUGZ9TA89",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 10351.24,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0073",
+          "description": null,
+          "amount": 10351.24,
+          "startDate": "2021-10-01",
+          "endDate": "2022-09-30",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 10351.24,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0073",
+        "description": null,
+        "amount": 10351.24,
+        "startDate": "2021-10-01",
+        "endDate": "2022-09-30",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "MAIN THEATER PLACE, L.P.",
+      "uei": "H5G4MFDDBPD6",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 9250,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0123P0002",
+          "description": null,
+          "amount": 9250,
+          "startDate": "2022-11-29",
+          "endDate": "2023-03-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 9250,
+      "mostRecentLease": {
+        "awardId": "47PC0123P0002",
+        "description": null,
+        "amount": 9250,
+        "startDate": "2022-11-29",
+        "endDate": "2023-03-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "56 KING STREET, LLC",
+      "uei": "WB29FZXNSPJ9",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 8659.44,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0060",
+          "description": null,
+          "amount": 8659.44,
+          "startDate": "2021-10-01",
+          "endDate": "2023-12-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "VI"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "VI"
+      ],
+      "largestLease": 8659.44,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0060",
+        "description": null,
+        "amount": 8659.44,
+        "startDate": "2021-10-01",
+        "endDate": "2023-12-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "VI"
+      }
+    },
+    {
+      "companyName": "NIAGARA GROUP, L.P.",
+      "uei": "G4SER4M935M3",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 6770.85,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0011",
+          "description": null,
+          "amount": 6770.85,
+          "startDate": "2021-10-01",
+          "endDate": "2023-03-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "NY"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "NY"
+      ],
+      "largestLease": 6770.85,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0011",
+        "description": null,
+        "amount": 6770.85,
+        "startDate": "2021-10-01",
+        "endDate": "2023-03-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "NY"
+      }
+    },
+    {
+      "companyName": "JOHNJAVI CORPORATION",
+      "uei": "EH8HQSBWQK51",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 6039,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0003",
+          "description": null,
+          "amount": 6039,
+          "startDate": "2021-10-19",
+          "endDate": "2022-01-07",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 6039,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0003",
+        "description": null,
+        "amount": 6039,
+        "startDate": "2021-10-19",
+        "endDate": "2022-01-07",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "HOOVER PROPERTY ST. THOMAS, LLC",
+      "uei": "ECJYAEYMN741",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 3348.42,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0065",
+          "description": null,
+          "amount": 3348.42,
+          "startDate": "2021-10-01",
+          "endDate": "2022-12-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "VI"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "VI"
+      ],
+      "largestLease": 3348.42,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0065",
+        "description": null,
+        "amount": 3348.42,
+        "startDate": "2021-10-01",
+        "endDate": "2022-12-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "VI"
+      }
+    },
+    {
+      "companyName": "W-CITY VIEW PR LLC",
+      "uei": "EKX8KL4PEB67",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 950.91,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PC0522P0026",
+          "description": null,
+          "amount": 950.91,
+          "startDate": "2021-10-01",
+          "endDate": "2021-12-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "PR"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "PR"
+      ],
+      "largestLease": 950.91,
+      "mostRecentLease": {
+        "awardId": "47PC0522P0026",
+        "description": null,
+        "amount": 950.91,
+        "startDate": "2021-10-01",
+        "endDate": "2021-12-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "PR"
+      }
+    },
+    {
+      "companyName": "FIRST BANK BUILDING LLC",
+      "uei": "CAHWHK3G3BN3",
+      "duns": "",
+      "city": "",
+      "state": "",
+      "totalLeaseValue": 0,
+      "numberOfLeases": 1,
+      "leases": [
+        {
+          "awardId": "47PF0022P0062",
+          "description": null,
+          "amount": 0,
+          "startDate": "2022-09-22",
+          "endDate": "2023-08-31",
+          "naicsCode": null,
+          "naicsDescription": null,
+          "pscCode": null,
+          "pscDescription": null,
+          "performanceCity": null,
+          "performanceState": "MN"
+        }
+      ],
+      "propertyTypes": [],
+      "leaseStates": [
+        "MN"
+      ],
+      "largestLease": 0,
+      "mostRecentLease": {
+        "awardId": "47PF0022P0062",
+        "description": null,
+        "amount": 0,
+        "startDate": "2022-09-22",
+        "endDate": "2023-08-31",
+        "naicsCode": null,
+        "naicsDescription": null,
+        "pscCode": null,
+        "pscDescription": null,
+        "performanceCity": null,
+        "performanceState": "MN"
+      }
+    }
+  ]
+}
