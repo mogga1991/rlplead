@@ -326,19 +326,33 @@ When you need to scale:
 
 ## Troubleshooting
 
-### "Dynamic server usage" errors in build
-✅ **This is normal** - API routes are meant to be dynamic (server-rendered on demand)
-- These are indicated by ƒ symbol in build output
-- They work correctly in Vercel's serverless environment
+### Build succeeds but app doesn't work
+**Cause:** Environment variables not set in Vercel
+**Solution:**
+1. Go to your project in Vercel → Settings → Environment Variables
+2. Add `DATABASE_URL` with your Neon connection string
+3. Add `APIFY_API_KEY` (optional, but recommended)
+4. Click on your latest deployment → "..." menu → "Redeploy"
 
-### Database connection timeouts
+The app **will build successfully** even without environment variables (as of latest update), but **will not function** until you add them and redeploy.
+
+### "Dynamic server usage" errors in build logs
+✅ **This is completely normal** - API routes are meant to be dynamic (server-rendered on demand)
+- These are indicated by ƒ symbol in build output
+- Shows as "Error fetching..." in build logs but doesn't fail the build
+- They work correctly in Vercel's serverless environment
+- **You can safely ignore these messages**
+
+### Database connection timeouts at runtime
 - Check if your Neon database is active (free tier suspends after inactivity)
 - Verify DATABASE_URL has `sslmode=require` parameter
 - Check Neon dashboard for connection limits
+- Wait 30 seconds and try again (Neon may be waking from sleep)
 
 ### Build fails with TypeScript errors
 - Ensure `tsconfig.json` has `"target": "ES2017"` and `"downlevelIteration": true`
 - Run `npm run build` locally to catch errors before deploying
+- Check that all dependencies are properly installed
 
 ---
 
