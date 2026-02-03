@@ -8,11 +8,11 @@ import { saveLeadForUser, getSavedLeadsForUser } from '@/db/queries';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId') || 'default-user';
+    const userId = searchParams.get('userId') || 'user-admin-default';
 
-    const leads = await getSavedLeadsForUser(userId);
+    const savedLeads = await getSavedLeadsForUser(userId);
 
-    return NextResponse.json({ leads, count: leads.length });
+    return NextResponse.json({ savedLeads, count: savedLeads.length });
   } catch (error) {
     console.error('Error fetching saved leads:', error);
     return NextResponse.json(

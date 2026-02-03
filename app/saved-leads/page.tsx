@@ -71,20 +71,23 @@ export default function SavedLeadsPage() {
     // Convert saved leads to enriched leads format for export
     const leadsToExport = savedLeads.map((saved) => ({
       company: saved.company,
-      contacts: [],
-      companySize: '',
-      industry: '',
-      website: '',
-      linkedIn: '',
-      description: '',
+      contacts: saved.company?.contacts || [],
+      companySize: saved.company?.companySize || '',
+      industry: saved.company?.industry || 'Real Estate Leasing',
+      website: saved.company?.website || '',
+      linkedIn: saved.company?.linkedIn || '',
+      description: saved.company?.description || '',
+      specialities: saved.company?.specialities || [],
       salesIntelligence: {
-        opportunityScore: 0,
-        relationshipStrength: 'New' as const,
-        spendingTrend: 'Stable' as const,
-        keyInsights: [],
-        recommendedApproach: '',
-        bestContactTime: '',
-        decisionMakers: [],
+        opportunityScore: saved.company?.opportunityScore || 0,
+        relationshipStrength: (saved.company?.relationshipStrength || 'New') as 'New' | 'Emerging' | 'Established' | 'Strategic',
+        spendingTrend: (saved.company?.spendingTrend || 'Stable') as 'Growing' | 'Stable' | 'Declining',
+        keyInsights: saved.company?.keyInsights || [],
+        recommendedApproach: saved.company?.recommendedApproach || '',
+        bestContactTime: 'Business Hours',
+        nextBestAction: 'Research company and prepare outreach',
+        decisionMakers: (saved.company?.contacts || []).filter((c: any) => c.isDecisionMaker),
+        competitorInsights: [],
       },
     }));
 
@@ -267,26 +270,47 @@ export default function SavedLeadsPage() {
                       if (lead.company) {
                         setSelectedLead({
                           company: lead.company,
-                          contacts: [],
-                          companySize: '',
-                          industry: '',
-                          website: '',
-                          linkedIn: '',
-                          description: '',
+                          contacts: lead.company.contacts || [],
+                          companySize: lead.company.companySize || '',
+                          industry: lead.company.industry || 'Real Estate Leasing',
+                          website: lead.company.website || '',
+                          linkedIn: lead.company.linkedIn || '',
+                          description: lead.company.description || '',
+                          specialities: lead.company.specialities || [],
                           salesIntelligence: {
-                            opportunityScore: 0,
-                            relationshipStrength: 'New',
-                            spendingTrend: 'Stable',
-                            keyInsights: [],
-                            recommendedApproach: '',
-                            bestContactTime: '',
-                            decisionMakers: [],
+                            opportunityScore: lead.company.opportunityScore || 0,
+                            relationshipStrength: lead.company.relationshipStrength || 'New',
+                            spendingTrend: lead.company.spendingTrend || 'Stable',
+                            keyInsights: lead.company.keyInsights || [],
+                            recommendedApproach: lead.company.recommendedApproach || '',
+                            bestContactTime: 'Business Hours',
+                            nextBestAction: 'Research company and prepare outreach',
+                            decisionMakers: (lead.company.contacts || []).filter((c: any) => c.isDecisionMaker),
+                            competitorInsights: [],
                           },
                         });
                       }
                     }}
                   >
                     <div className="flex items-start justify-between">
+                      {/* Company/Contact Photo */}
+                      <div className="mr-4 flex-shrink-0">
+                        {lead.company?.contacts?.[0]?.photoUrl ? (
+                          <img
+                            src={lead.company.contacts[0].photoUrl}
+                            alt={lead.company.contacts[0].name}
+                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                          />
+                        ) : lead.company?.linkedIn ? (
+                          <div className="w-12 h-12 rounded-full bg-fed-green-100 flex items-center justify-center border-2 border-gray-200">
+                            <Building2 className="w-6 h-6 text-fed-green-700" />
+                          </div>
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center border-2 border-gray-200">
+                            <Building2 className="w-6 h-6 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold text-gray-900 truncate">
