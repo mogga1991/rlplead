@@ -274,6 +274,7 @@ export const users = pgTable('users', {
   // Basic Info
   email: varchar('email', { length: 255 }).unique().notNull(),
   name: varchar('name', { length: 255 }),
+  passwordHash: varchar('password_hash', { length: 255 }),
   role: varchar('role', { length: 50 }).default('sales'), // "admin", "sales", "viewer"
 
   // Settings
