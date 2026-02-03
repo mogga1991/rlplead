@@ -29,7 +29,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-            placeholder="Describe your ideal federal contractor or enter NAICS/PSC code..."
+            placeholder="Search for GSA lessors — companies leasing office, parking, or land to the government..."
             className="flex-1 text-sm text-gray-900 placeholder-gray-500 focus:outline-none"
           />
           <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all">

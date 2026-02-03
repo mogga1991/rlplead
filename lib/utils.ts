@@ -32,148 +32,105 @@ export function exportToCSV(leads: EnrichedLead[]): string {
     // Company Identification
     'Company Name',
     'UEI',
-    'DUNS',
-    'Business Type',
+    'Website',
 
-    // Location
-    'City',
-    'State',
-    'Congressional District',
-    'Multi-State Operator',
+    // GSA Lease Intelligence
+    'Total GSA Lease Value',
+    'Number of Leases',
+    'Property Types',
+    'Lease States',
+    'Most Recent Award Date',
 
-    // Financial Intelligence
-    'Total Awards',
-    'Total Obligations',
-    'Total Outlays',
-    'Contract Count',
-    'Avg Contract Value',
-    'Largest Contract',
-    'Active Contracts',
-
-    // Timeline Intelligence
-    'Years in Business',
-    'First Contract Date',
-    'Last Contract Date',
+    // Contact Information
+    'Contact Name',
+    'Contact Title',
+    'Contact Email',
+    'Contact Phone',
+    'LinkedIn',
 
     // Sales Intelligence
     'Opportunity Score',
     'Relationship Strength',
-    'Spending Trend',
-    'Key Insights',
     'Recommended Approach',
 
-    // Contact Information
-    'Primary Contact Name',
-    'Primary Contact Title',
-    'Primary Contact Email',
-    'Primary Contact Phone',
-    'Decision Makers Count',
-    'Total Contacts',
+    // Location
+    'City',
+    'State',
+    'Multi-State Operator',
 
-    // Agency Relationships
-    'Top Agency',
-    'Top Agency Spending',
-    'Total Agencies',
-    'All Agencies',
+    // Timeline Intelligence
+    'Years in Business',
+    'First Lease Date',
+    'Last Lease Date',
+    'Active Leases',
 
-    // Industry Focus
-    'Top NAICS Code',
-    'Top NAICS Description',
-    'All NAICS Codes',
-
-    // Contract Intelligence
-    'Competition - Full & Open',
-    'Competition - Sole Source',
-    'Set-Aside Programs',
-    'Contract Types',
-
-    // Special Programs
-    'COVID-19 Recipient',
-    'Infrastructure Recipient',
-    'Disaster Funding Recipient',
+    // Financial Details
+    'Average Lease Value',
+    'Largest Lease',
 
     // Company Profile
+    'Business Type',
     'Company Size',
     'Industry',
-    'Website',
-    'LinkedIn',
     'Description',
   ];
 
   const rows = leads.map((lead) => {
     const contact = lead.contacts[0] || {};
-    const topAgency = lead.company.topAgencies[0] || { name: '', totalSpending: 0 };
-    const topNAICS = lead.company.topNAICS[0] || { code: '', description: '' };
+
+    // Determine property types from PSC codes
+    const propertyTypes = lead.company.topPSC.map(psc => {
+      if (['X1AA', 'X1AB', 'X1AZ'].includes(psc.code)) return 'Office';
+      if (psc.code === 'X1FA') return 'Parking';
+      if (psc.code === 'X1ND') return 'Land';
+      return 'Other';
+    });
+    const uniquePropertyTypes = [...new Set(propertyTypes)].join(', ');
 
     return [
       // Company Identification
       lead.company.companyName,
       lead.company.uei,
-      lead.company.duns,
-      lead.company.recipientType,
+      lead.website,
 
-      // Location
-      lead.company.city,
-      lead.company.state,
-      lead.company.congressionalDistrict,
-      lead.company.multiStateOperator ? 'Yes' : 'No',
-
-      // Financial Intelligence
+      // GSA Lease Intelligence
       formatCurrency(lead.company.totalAwards),
-      formatCurrency(lead.company.totalObligations),
-      formatCurrency(lead.company.totalOutlays),
       lead.company.contractCount.toString(),
-      formatCurrency(lead.company.avgContractValue),
-      formatCurrency(lead.company.largestContractValue),
-      lead.company.activeContracts.toString(),
-
-      // Timeline Intelligence
-      lead.company.yearsInBusiness.toString(),
-      lead.company.firstContractDate,
+      uniquePropertyTypes,
+      lead.company.performanceStates.join(', '),
       lead.company.lastContractDate,
-
-      // Sales Intelligence
-      lead.salesIntelligence.opportunityScore.toString(),
-      lead.salesIntelligence.relationshipStrength,
-      lead.salesIntelligence.spendingTrend,
-      lead.salesIntelligence.keyInsights.join(' | '),
-      lead.salesIntelligence.recommendedApproach,
 
       // Contact Information
       contact.name || '',
       contact.title || '',
       contact.email || '',
       contact.phone || '',
-      lead.salesIntelligence.decisionMakers.length.toString(),
-      lead.contacts.length.toString(),
+      contact.linkedIn || contact.linkedinUrl || lead.linkedIn || '',
 
-      // Agency Relationships
-      topAgency.name,
-      formatCurrency(topAgency.totalSpending),
-      lead.company.agencyCount.toString(),
-      lead.company.topAgencies.map(a => a.name).join('; '),
+      // Sales Intelligence
+      lead.salesIntelligence.opportunityScore.toString(),
+      lead.salesIntelligence.relationshipStrength,
+      lead.salesIntelligence.recommendedApproach,
 
-      // Industry Focus
-      topNAICS.code,
-      topNAICS.description,
-      lead.company.topNAICS.map(n => `${n.code} (${n.contractCount})`).join('; '),
+      // Location
+      lead.company.city,
+      lead.company.state,
+      lead.company.multiStateOperator ? 'Yes' : 'No',
 
-      // Contract Intelligence
-      lead.company.competitionLevel.fullAndOpen.toString(),
-      lead.company.competitionLevel.soleSource.toString(),
-      lead.company.setAsidePrograms.join('; '),
-      lead.company.contractTypes.join('; '),
+      // Timeline Intelligence
+      lead.company.yearsInBusiness.toString(),
+      lead.company.firstContractDate,
+      lead.company.lastContractDate,
+      lead.company.activeContracts.toString(),
 
-      // Special Programs
-      lead.company.covid19Recipient ? 'Yes' : 'No',
-      lead.company.infrastructureRecipient ? 'Yes' : 'No',
-      lead.company.disasterFundingRecipient ? 'Yes' : 'No',
+      // Financial Details
+      formatCurrency(lead.company.avgContractValue),
+      formatCurrency(lead.company.largestContractValue),
 
       // Company Profile
+      lead.company.recipientType,
       lead.companySize,
       lead.industry,
-      lead.website,
-      lead.linkedIn,
       lead.description.substring(0, 500), // Truncate long descriptions
     ].map((value) => `"${String(value).replace(/"/g, '""')}"`);
   });

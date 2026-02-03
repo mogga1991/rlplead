@@ -108,15 +108,36 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
     return 'bg-gray-100 text-gray-700 border-gray-200';
   };
 
+  // Helper to determine property types from PSC codes
+  const getPropertyTypes = (lead: EnrichedLead): string[] => {
+    const pscCodes = lead.company.topPSC.map(p => p.code);
+    const types = new Set<string>();
+
+    if (pscCodes.some(code => ['X1AA', 'X1AB', 'X1AZ'].includes(code))) {
+      types.add('Office');
+    }
+    if (pscCodes.some(code => code === 'X1FA')) {
+      types.add('Parking');
+    }
+    if (pscCodes.some(code => code === 'X1ND')) {
+      types.add('Land');
+    }
+    if (pscCodes.some(code => code === 'X1JZ')) {
+      types.add('Other');
+    }
+
+    return Array.from(types);
+  };
+
   if (loading) {
     return (
       <Card padding="lg">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-fed-green-700 animate-spin" />
-          <span className="ml-3 text-gray-600">Searching for contractors and enriching data...</span>
+          <span className="ml-3 text-gray-600">Finding GSA lessors and enriching contact data...</span>
         </div>
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-500">This may take a moment as we gather comprehensive intelligence from multiple sources.</p>
+          <p className="text-sm text-gray-500">Searching for companies that have won GSA lease awards...</p>
         </div>
       </Card>
     );
@@ -127,14 +148,14 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
       <Card padding="lg">
         <div className="text-center py-12">
           <TrendingUp className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <p className="text-gray-600 mb-2 font-medium">No contractors found</p>
+          <p className="text-gray-600 mb-2 font-medium">No GSA lessors found</p>
           <p className="text-sm text-gray-500 mb-4">Try broadening your search criteria or using different filters</p>
           <div className="text-xs text-gray-500 text-left max-w-md mx-auto">
             <p className="font-medium mb-2">Suggestions:</p>
             <ul className="list-disc list-inside space-y-1">
-              <li>Remove some filters to see more results</li>
-              <li>Try a broader NAICS code category</li>
-              <li>Expand the location filter to include more states</li>
+              <li>Try "All Types" to see all property types</li>
+              <li>Expand to more states or select "All States"</li>
+              <li>Remove keyword filters</li>
               <li>Adjust the time period to include more fiscal years</li>
             </ul>
           </div>
@@ -197,7 +218,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 onClick={() => handleSort('awards')}
               >
                 <div className="flex items-center gap-2">
-                  Total Awards
+                  Total Lease Value
                   <SortIcon field="awards" />
                 </div>
               </th>
@@ -206,21 +227,15 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 onClick={() => handleSort('contracts')}
               >
                 <div className="flex items-center gap-2">
-                  Contracts
+                  # Leases
                   <SortIcon field="contracts" />
                 </div>
               </th>
-              <th
-                className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('agencies')}
-              >
-                <div className="flex items-center gap-2">
-                  Agencies
-                  <SortIcon field="agencies" />
-                </div>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Property Types
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Top Agency
+                Lease States
               </th>
             </tr>
           </thead>
@@ -318,32 +333,31 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     </div>
                   </td>
 
-                  {/* Agencies */}
+                  {/* Property Types */}
                   <td className="px-4 py-4">
-                    <div className="text-sm font-medium text-gray-900">
-                      {lead.company.agencyCount}
+                    <div className="flex flex-wrap gap-1">
+                      {getPropertyTypes(lead).map((type) => (
+                        <Badge key={type} variant="outline" size="sm">
+                          {type}
+                        </Badge>
+                      ))}
                     </div>
-                    {lead.salesIntelligence.keyInsights.some(i => i.includes('different agencies')) && (
-                      <Badge variant="success" size="sm" className="mt-1">
-                        Diverse
-                      </Badge>
-                    )}
                   </td>
 
-                  {/* Top Agency */}
+                  {/* Lease States */}
                   <td className="px-4 py-4">
-                    {topAgency ? (
-                      <div>
-                        <div className="text-sm text-gray-900 font-medium truncate max-w-[150px]">
-                          {topAgency.name}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          ${(topAgency.totalSpending / 1000000).toFixed(1)}M
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-gray-400">-</span>
-                    )}
+                    <div className="flex flex-wrap gap-1">
+                      {lead.company.performanceStates.slice(0, 3).map((state) => (
+                        <Badge key={state} variant="default" size="sm">
+                          {state}
+                        </Badge>
+                      ))}
+                      {lead.company.performanceStates.length > 3 && (
+                        <Badge variant="outline" size="sm">
+                          +{lead.company.performanceStates.length - 3}
+                        </Badge>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

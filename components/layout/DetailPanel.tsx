@@ -136,35 +136,35 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({ lead, onClose }) => {
             </div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Quick Stats - Lease Focused */}
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="bg-fed-green-50 rounded-lg p-3">
               <DollarSign className="w-4 h-4 text-fed-green-700 mb-1" />
               <div className="text-lg font-bold text-fed-green-900">
                 ${(lead.company.totalAwards / 1000000).toFixed(1)}M
               </div>
-              <div className="text-xs text-fed-green-700">Total Awards</div>
+              <div className="text-xs text-fed-green-700">Total GSA Lease Value</div>
             </div>
             <div className="bg-blue-50 rounded-lg p-3">
               <Award className="w-4 h-4 text-blue-700 mb-1" />
               <div className="text-lg font-bold text-blue-900">
                 {lead.company.contractCount}
               </div>
-              <div className="text-xs text-blue-700">Contracts</div>
+              <div className="text-xs text-blue-700">Active GSA Leases</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-3">
               <Building2 className="w-4 h-4 text-purple-700 mb-1" />
               <div className="text-lg font-bold text-purple-900">
-                {lead.company.agencyCount}
+                {lead.company.performanceStates.length}
               </div>
-              <div className="text-xs text-purple-700">Agencies</div>
+              <div className="text-xs text-purple-700">Lease States</div>
             </div>
             <div className="bg-orange-50 rounded-lg p-3">
               <Calendar className="w-4 h-4 text-orange-700 mb-1" />
               <div className="text-lg font-bold text-orange-900">
                 {lead.company.yearsInBusiness}
               </div>
-              <div className="text-xs text-orange-700">Years Active</div>
+              <div className="text-xs text-orange-700">Years in Business</div>
             </div>
           </div>
 
@@ -338,36 +338,41 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({ lead, onClose }) => {
           </Card>
         )}
 
-        {/* Top Agencies */}
+        {/* Lease Portfolio */}
         <Card padding="md">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-900">
-              Top Agencies ({lead.company.topAgencies.length})
-            </h3>
-            {lead.company.topAgencies.length > 3 && (
-              <button
-                onClick={() => setShowAllAgencies(!showAllAgencies)}
-                className="text-xs text-fed-green-700 hover:text-fed-green-900 flex items-center gap-1"
-              >
-                {showAllAgencies ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                {showAllAgencies ? 'Less' : 'More'}
-              </button>
-            )}
-          </div>
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">
+            Lease Portfolio
+          </h3>
           <div className="space-y-2">
-            {lead.company.topAgencies
-              .slice(0, showAllAgencies ? undefined : 3)
-              .map((agency, index) => (
+            {/* Property Types Breakdown */}
+            {lead.company.topPSC.map((psc, index) => {
+              let propertyType = 'Other';
+              if (['X1AA', 'X1AB', 'X1AZ'].includes(psc.code)) propertyType = 'Office';
+              else if (psc.code === 'X1FA') propertyType = 'Parking';
+              else if (psc.code === 'X1ND') propertyType = 'Land';
+
+              return (
                 <div key={index} className="flex justify-between items-start">
                   <div className="flex-1">
-                    <p className="text-xs font-medium text-gray-900">{agency.name}</p>
-                    <p className="text-xs text-gray-500">{agency.contractCount} contracts</p>
+                    <p className="text-xs font-medium text-gray-900">{propertyType}</p>
+                    <p className="text-xs text-gray-500">{psc.code} - {psc.contractCount} leases</p>
                   </div>
-                  <p className="text-xs font-semibold text-gray-700">
-                    ${(agency.totalSpending / 1000000).toFixed(1)}M
-                  </p>
+                  <Badge variant="outline" size="sm">{psc.code}</Badge>
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Lease Locations */}
+          <div className="mt-3 pt-3 border-t border-gray-200">
+            <p className="text-xs font-semibold text-gray-700 mb-2">Lease Locations</p>
+            <div className="flex gap-1 flex-wrap">
+              {lead.company.performanceStates.map((state) => (
+                <Badge key={state} variant="default" size="sm">
+                  {state}
+                </Badge>
               ))}
+            </div>
           </div>
         </Card>
 

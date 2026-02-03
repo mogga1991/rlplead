@@ -138,17 +138,52 @@ export async function searchContractors(
       searchParams.filters!.award_type_codes = ['A', 'B', 'C', 'D']; // Procurement contracts
     }
 
-    // Add NAICS codes
-    if (filters.industry) {
-      searchParams.filters!.naics_codes = [filters.industry];
-    } else if (filters.naicsCodes && filters.naicsCodes.length > 0) {
-      searchParams.filters!.naics_codes = filters.naicsCodes;
-    }
+    // ========================================================================
+    // HARDCODED GSA LEASE FILTERS - ALWAYS APPLIED
+    // ========================================================================
+    // These find companies (recipients) who have WON GSA lease awards.
+    // These are our sales leads - the lessors, landlords, and brokers.
+    // User filters can narrow down WHICH lease winners, but cannot override these.
 
-    // Add PSC codes
-    if (filters.pscCodes && filters.pscCodes.length > 0) {
-      searchParams.filters!.psc_codes = filters.pscCodes;
+    // HARDCODED: NAICS codes - Real Estate Leasing Only (531 family)
+    const GSA_LEASE_NAICS = [
+      '531110', // Lessors of Residential Buildings
+      '531120', // Lessors of Nonresidential Buildings (office)
+      '531130', // Lessors of Miniwarehouses/Self-Storage
+      '531190', // Lessors of Other Real Estate (land, parking)
+      '531210', // Real Estate Agents and Brokers
+      '531311', // Residential Property Managers
+      '531312', // Nonresidential Property Managers
+      '531320', // Real Estate Appraisers
+    ];
+    searchParams.filters!.naics_codes = GSA_LEASE_NAICS;
+
+    // HARDCODED: PSC codes - Real Estate Lease Codes Only (X1 family)
+    // Property type filter can narrow this list, but never expand beyond these
+    let GSA_LEASE_PSC = [
+      'X1AA', // Lease/Rental of Office Buildings
+      'X1AB', // Lease/Rental of Conference Space
+      'X1AZ', // Lease/Rental of Other Admin Facilities
+      'X1FA', // Lease/Rental of Parking Facilities
+      'X1JZ', // Lease/Rental of Miscellaneous Buildings
+      'X1ND', // Lease/Rental of Land
+    ];
+
+    // Property type filter narrows down which PSC codes to search
+    if (filters.propertyType && filters.propertyType !== 'all') {
+      switch (filters.propertyType) {
+        case 'office':
+          GSA_LEASE_PSC = ['X1AA', 'X1AB', 'X1AZ'];
+          break;
+        case 'parking':
+          GSA_LEASE_PSC = ['X1FA'];
+          break;
+        case 'land':
+          GSA_LEASE_PSC = ['X1ND'];
+          break;
+      }
     }
+    searchParams.filters!.psc_codes = GSA_LEASE_PSC;
 
     // Add performance location filter
     if (filters.location && filters.location !== 'USA') {
@@ -170,16 +205,15 @@ export async function searchContractors(
       searchParams.filters!.keywords = [filters.keywords];
     }
 
-    // Add agency filter
-    if (filters.agency) {
-      searchParams.filters!.agencies = [
-        {
-          type: 'awarding',
-          tier: 'toptier',
-          name: filters.agency,
-        },
-      ];
-    }
+    // HARDCODED: Agency filter - ALWAYS GSA
+    // We only want companies that have won GSA lease awards
+    searchParams.filters!.agencies = [
+      {
+        type: 'awarding',
+        tier: 'toptier',
+        name: 'General Services Administration',
+      },
+    ];
 
     // Add award amount range
     if (filters.minAwardAmount || filters.maxAwardAmount) {

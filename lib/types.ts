@@ -217,6 +217,9 @@ export interface EnrichedLead {
 // ============================================================================
 
 export interface SearchFilters {
+  // Property Type (narrows down which GSA lease winners to find)
+  propertyType?: 'all' | 'office' | 'parking' | 'land';
+
   // Industry/Classification
   industry?: string;
   naicsCodes?: string[];

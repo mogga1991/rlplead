@@ -89,11 +89,33 @@ export async function enrichCompanyContactsWithApify(
 
     // Strategy 1: Try using Apollo People Leads Scraper
     // This searches for people at specific organizations
+    // Target real estate/leasing decision makers
+    const REAL_ESTATE_TITLES = [
+      'Government Leasing',
+      'Federal Leasing',
+      'Leasing Director',
+      'Leasing Manager',
+      'VP of Leasing',
+      'Asset Manager',
+      'Property Manager',
+      'Director of Real Estate',
+      'VP Real Estate',
+      'Owner',
+      'Principal',
+      'Managing Partner',
+      'CEO',
+      'President',
+      'Business Development',
+      'Government Contracts',
+      'Government Relations',
+    ];
+
     const input = {
       searchQuery: companyNames.slice(0, 10), // Limit to first 10 companies
       maxResults: 3, // Get up to 3 contacts per company
       includeEmails: true,
       includePhones: true,
+      jobTitles: REAL_ESTATE_TITLES, // Target real estate/leasing decision makers
     };
 
     console.log('Starting Apify actor run...');

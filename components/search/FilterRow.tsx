@@ -13,21 +13,16 @@ interface FilterRowProps {
   onSearch: () => void;
 }
 
-// Sample data - in production, these would come from an API
-const industryOptions: DropdownOption[] = [
-  { value: '', label: 'All industries' },
-  { value: '54', label: 'Professional, Scientific, and Technical Services' },
-  { value: '541330', label: 'Engineering Services' },
-  { value: '541511', label: 'Custom Computer Programming Services' },
-  { value: '541512', label: 'Computer Systems Design Services' },
-  { value: '541519', label: 'Other Computer Related Services' },
-  { value: '336411', label: 'Aircraft Manufacturing' },
-  { value: '334511', label: 'Search, Detection, Navigation Instruments' },
+// Property type options - narrows down which GSA lease winners to find
+const propertyTypeOptions: DropdownOption[] = [
+  { value: 'all', label: 'All Types' },
+  { value: 'office', label: 'Office Space' },
+  { value: 'parking', label: 'Parking' },
+  { value: 'land', label: 'Land' },
 ];
 
 const locationOptions: DropdownOption[] = [
-  { value: '', label: 'Worldwide' },
-  { value: 'USA', label: 'United States' },
+  { value: '', label: 'All States' },
   { value: 'VA', label: 'Virginia' },
   { value: 'MD', label: 'Maryland' },
   { value: 'DC', label: 'District of Columbia' },
@@ -35,6 +30,11 @@ const locationOptions: DropdownOption[] = [
   { value: 'TX', label: 'Texas' },
   { value: 'FL', label: 'Florida' },
   { value: 'NY', label: 'New York' },
+  { value: 'IL', label: 'Illinois' },
+  { value: 'GA', label: 'Georgia' },
+  { value: 'NC', label: 'North Carolina' },
+  { value: 'WA', label: 'Washington' },
+  { value: 'CO', label: 'Colorado' },
 ];
 
 export const FilterRow: React.FC<FilterRowProps> = ({
@@ -46,31 +46,31 @@ export const FilterRow: React.FC<FilterRowProps> = ({
     <div className="flex items-end gap-4">
       <div className="flex-1 grid grid-cols-4 gap-4">
         <Dropdown
-          label="NAICS/Industry"
-          options={industryOptions}
-          value={filters.industry || ''}
-          onChange={(value) => onChange({ ...filters, industry: value })}
-          placeholder="Select industry"
+          label="Property Type"
+          options={propertyTypeOptions}
+          value={filters.propertyType || 'all'}
+          onChange={(value) => onChange({ ...filters, propertyType: value as 'all' | 'office' | 'parking' | 'land' })}
+          placeholder="Select property type"
         />
 
         <Dropdown
-          label="Location"
+          label="State"
           options={locationOptions}
           value={filters.location || ''}
           onChange={(value) => onChange({ ...filters, location: value })}
-          placeholder="Select location"
+          placeholder="Select state"
         />
 
         <Input
-          label="Agency Filter"
-          placeholder="Enter areas"
+          label="Lease Value Range"
+          placeholder="e.g., 100000-5000000"
           value={filters.agency || ''}
           onChange={(e) => onChange({ ...filters, agency: e.target.value })}
         />
 
         <Input
           label="Keyword"
-          placeholder="Enter keywords"
+          placeholder="Class A, SCIF, 10000 RSF..."
           value={filters.keywords || ''}
           onChange={(e) => onChange({ ...filters, keywords: e.target.value })}
         />
@@ -83,7 +83,7 @@ export const FilterRow: React.FC<FilterRowProps> = ({
         onClick={onSearch}
         className="mb-0"
       >
-        Find my leads
+        Find Lessors
       </Button>
     </div>
   );
