@@ -5,9 +5,12 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { batchInsertEnrichedLeads } from '../db/queries';
+import { batchInsertEnrichedLeads, saveLeadForUser } from '../db/queries';
 import { calculateSalesIntelligence } from '../lib/usaspending';
 import type { EnrichedLead, AggregatedCompany } from '../lib/types';
+import { db } from '../db';
+import { users } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
 async function importLessors() {
   console.log('📥 Importing GSA Lessors into Database\n');
@@ -122,6 +125,48 @@ async function importLessors() {
     const results = await batchInsertEnrichedLeads(enrichedLeads);
 
     console.log(`✅ Successfully imported ${results.length} companies!\n`);
+
+    // Find or create a default user to save leads for
+    console.log('👤 Finding or creating default user...\n');
+
+    let defaultUser = await db.query.users.findFirst({
+      where: eq(users.email, 'admin@rlplead.com'),
+    });
+
+    if (!defaultUser) {
+      console.log('Creating default admin user...\n');
+      const newUser = await db.insert(users).values({
+        id: 'user-admin-default',
+        email: 'admin@rlplead.com',
+        name: 'Admin User',
+        role: 'admin',
+        createdAt: new Date(),
+      }).returning();
+      defaultUser = newUser[0];
+    }
+
+    console.log(`Using user: ${defaultUser.email} (${defaultUser.id})\n`);
+
+    // Save all imported companies to saved_leads
+    console.log('💾 Saving companies to Saved Leads...\n');
+
+    let savedCount = 0;
+    for (const result of results) {
+      try {
+        await saveLeadForUser(result.company.id, defaultUser.id, {
+          listName: 'GSA Lessors',
+          tags: ['GSA', 'Real Estate', 'Import'],
+          status: 'new',
+          priority: result.company.opportunityScore >= 10 ? 'high' : 'medium',
+          notes: `Auto-imported GSA lessor with $${parseFloat(result.company.totalAwards).toLocaleString()} in lease value`,
+        });
+        savedCount++;
+      } catch (error) {
+        console.error(`Failed to save lead for ${result.company.name}:`, error);
+      }
+    }
+
+    console.log(`✅ Saved ${savedCount} companies to Saved Leads!\n`);
 
     // Display summary
     console.log('📊 Import Summary:\n');
