@@ -46,10 +46,19 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` and add your Apify API key (optional):
-```
+Edit `.env` and add your environment variables:
+```bash
+# Apify API Key (optional - uses mock data if not provided)
 APIFY_API_KEY=your_apify_api_key_here
+
+# Neon Database URL (required)
+DATABASE_URL=your_neon_database_url_here
 ```
+
+**Security Note**:
+- ✅ `.env` is already in `.gitignore` - your API keys will NEVER be committed to Git
+- ✅ Always keep your API keys and database credentials private
+- ✅ For production deployment, use Vercel's environment variables dashboard
 
 **Note**: If you don't have an Apify API key, the application will use mock data for contact enrichment.
 
@@ -68,6 +77,23 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm run build
 npm start
 ```
+
+## Deployment to Vercel
+
+Deploy FedLeads to Vercel with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mogga1991/rlplead)
+
+**Or deploy manually:**
+
+1. Push your code to GitHub
+2. Import your repository in [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard:
+   - `DATABASE_URL` - Your Neon PostgreSQL connection string
+   - `APIFY_API_KEY` - Your Apify API key (optional)
+4. Deploy!
+
+**📖 For detailed deployment instructions, security best practices, and troubleshooting, see [DEPLOYMENT.md](./DEPLOYMENT.md)**
 
 ## Project Structure
 

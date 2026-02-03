@@ -157,6 +157,7 @@ export interface Contact {
   title: string;
   position?: string; // Alias for title
   email: string;
+  phone?: string;
   linkedinUrl?: string; // Alias for linkedIn
   linkedIn: string;
   photoUrl?: string;
