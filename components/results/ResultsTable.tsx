@@ -71,7 +71,6 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           companyId,
-          userId: 'user-admin-default',
           listName: 'GSA Lessors',
           tags: ['GSA', 'Real Estate', 'Search Result'],
           status: 'new',
@@ -355,18 +354,35 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                   {/* Primary Contact */}
                   <td className="px-4 py-4">
                     {primaryContact ? (
-                      <div>
-                        <div className="text-sm text-gray-900 font-medium">
-                          {primaryContact.name}
+                      <div className="flex items-center gap-3">
+                        {/* Contact Photo */}
+                        <div className="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                          {primaryContact.photoUrl ? (
+                            <img
+                              src={primaryContact.photoUrl}
+                              alt={primaryContact.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-gray-600 font-semibold text-sm">
+                              {primaryContact.firstName?.[0] || primaryContact.name[0]}
+                              {primaryContact.lastName?.[0] || primaryContact.name.split(' ')[1]?.[0] || ''}
+                            </span>
+                          )}
                         </div>
-                        <div className="text-xs text-gray-500 truncate max-w-[200px]">
-                          {primaryContact.title}
-                        </div>
-                        {primaryContact.email && (
-                          <div className="text-xs text-fed-green-700 truncate max-w-[200px]">
-                            {primaryContact.email}
+                        <div>
+                          <div className="text-sm text-gray-900 font-medium">
+                            {primaryContact.name}
                           </div>
-                        )}
+                          <div className="text-xs text-gray-500 truncate max-w-[200px]">
+                            {primaryContact.title}
+                          </div>
+                          {primaryContact.email && (
+                            <div className="text-xs text-fed-green-700 truncate max-w-[200px]">
+                              {primaryContact.email}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <span className="text-sm text-gray-400">No contact</span>
@@ -441,7 +457,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
 
                       return (
                         <Button
-                          variant={isSaved ? "default" : "outline"}
+                          variant={isSaved ? "primary" : "outline"}
                           size="sm"
                           icon={isSaved ? BookmarkCheck : Bookmark}
                           onClick={(e) => !isSaved && handleSaveLead(lead, e)}

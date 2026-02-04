@@ -1,4 +1,5 @@
 import { USASpendingResult, AggregatedCompany, SearchFilters } from './types';
+import { cacheOrFetch, generateCacheKey, CachePrefix, CacheTTL } from './cache';
 
 const USA_SPENDING_BASE_URL = 'https://api.usaspending.gov/api/v2';
 
@@ -243,22 +244,33 @@ export async function searchContractors(
 
     console.log('Searching USASpending with params:', JSON.stringify(searchParams, null, 2));
 
-    // Make API request
-    const response = await fetch(`${USA_SPENDING_BASE_URL}/search/spending_by_award/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // Generate cache key based on search parameters
+    const cacheKey = generateCacheKey(CachePrefix.USASPENDING, searchParams);
+
+    // Use cache-or-fetch pattern
+    const data = await cacheOrFetch(
+      cacheKey,
+      async () => {
+        // Make API request
+        const response = await fetch(`${USA_SPENDING_BASE_URL}/search/spending_by_award/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(searchParams),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('USASpending API error:', errorText);
+          throw new Error(`USASpending API error: ${response.statusText}`);
+        }
+
+        return await response.json();
       },
-      body: JSON.stringify(searchParams),
-    });
+      CacheTTL.SEARCH_RESULTS // Cache for 1 hour
+    );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('USASpending API error:', errorText);
-      throw new Error(`USASpending API error: ${response.statusText}`);
-    }
-
-    const data = await response.json();
     console.log(`USASpending returned ${data.results?.length || 0} results`);
 
     // Transform results with comprehensive field mapping

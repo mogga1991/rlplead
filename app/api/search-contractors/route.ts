@@ -1,123 +1,91 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { searchContractors, aggregateByCompany, calculateSalesIntelligence } from '@/lib/usaspending';
-import { enrichCompanyContacts, generateMockEnrichment } from '@/lib/apify';
-import { EnrichedLead, SearchFilters, Contact } from '@/lib/types';
-import { batchInsertEnrichedLeads, saveSearch } from '@/db/queries';
+import { addSearchJob } from '@/lib/queue';
+import { log } from '@/lib/logger';
+import { handleAPIError } from '@/lib/error-handler';
+import { ValidationError, JobError } from '@/lib/errors';
+import { searchFiltersSchema, getValidationErrorMessage, getValidationErrorField } from '@/lib/validation';
+import { checkSearchRateLimit, getUserIdentifier, getRateLimitHeaders } from '@/lib/rate-limiter';
+import { checkCSRF } from '@/lib/csrf';
+import { auth } from '@/lib/auth';
 
+/**
+ * Search Contractors API - Now uses background job processing
+ * This eliminates the 30-second timeout problem by handling searches asynchronously
+ *
+ * Rate Limit: 10 searches per hour per user/IP
+ * CSRF Protection: Required for all POST requests
+ */
 export async function POST(request: NextRequest) {
   try {
-    const filters: SearchFilters = await request.json();
+    // CSRF validation FIRST (before any other processing)
+    await checkCSRF(request);
 
-    // Step 1: Search USASpending.gov for contractors
-    console.log('Searching USASpending.gov...', filters);
-    const contractResults = await searchContractors(filters);
-
-    if (contractResults.length === 0) {
-      return NextResponse.json({ leads: [] });
+    // Parse and validate request body (don't consume rate limit for invalid requests)
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch (error) {
+      throw new ValidationError('Invalid request body. Expected JSON.');
     }
 
-    // Step 2: Aggregate by company
-    console.log(`Found ${contractResults.length} contracts`);
-    const companies = aggregateByCompany(contractResults);
-    console.log(`Aggregated into ${companies.length} companies`);
+    // Validate filters with Zod schema
+    const validationResult = searchFiltersSchema.safeParse(rawBody);
 
-    // Step 3: Enrich with contact data
-    const companyNames = companies.slice(0, 20).map((c) => c.companyName);
-
-    let enrichedData: Map<string, { contacts: Contact[]; companyInfo: any }>;
-
-    // Check if we have an Apify API key
-    if (process.env.APIFY_API_KEY) {
-      console.log('Enriching with Apify Apollo...');
-      enrichedData = await enrichCompanyContacts(companyNames);
-
-      // If Apify returned no results, fall back to mock data
-      if (enrichedData.size === 0) {
-        console.log('Apify returned no results, using mock data...');
-        enrichedData = new Map();
-        companies.slice(0, 20).forEach((company) => {
-          enrichedData.set(
-            company.companyName,
-            generateMockEnrichment(company.companyName)
-          );
-        });
-      }
-    } else {
-      console.log('No Apify API key, using mock data...');
-      enrichedData = new Map();
-      companies.slice(0, 20).forEach((company) => {
-        enrichedData.set(
-          company.companyName,
-          generateMockEnrichment(company.companyName)
-        );
-      });
+    if (!validationResult.success) {
+      const errorMessage = getValidationErrorMessage(validationResult.error);
+      const errorField = getValidationErrorField(validationResult.error);
+      throw new ValidationError(errorMessage, errorField);
     }
 
-    // Step 4: Calculate sales intelligence and combine data
-    const leads: EnrichedLead[] = companies.map((company) => {
-      const enrichment = enrichedData.get(company.companyName) || {
-        contacts: [],
-        companyInfo: {},
-      };
+    const filters = validationResult.data;
 
-      // Calculate sales intelligence for this company
-      const intelligence = calculateSalesIntelligence(company);
+    // Get user session
+    const session = await auth();
+    const userId = session?.user?.id;
 
-      // Identify decision makers (C-level and directors)
-      const decisionMakers = enrichment.contacts.filter((contact: Contact) => {
-        const title = contact.title.toLowerCase();
-        return (
-          title.includes('ceo') ||
-          title.includes('cto') ||
-          title.includes('cfo') ||
-          title.includes('coo') ||
-          title.includes('chief') ||
-          title.includes('president') ||
-          title.includes('director') ||
-          title.includes('vp') ||
-          title.includes('vice president')
-        );
-      });
+    // Get client IP for rate limiting
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ||
+               request.headers.get('x-real-ip') ||
+               'unknown';
 
-      return {
-        company,
-        contacts: enrichment.contacts || [],
-        companySize: enrichment.companyInfo.size || '',
-        industry: enrichment.companyInfo.industry || '',
-        website: enrichment.companyInfo.website || '',
-        linkedIn: enrichment.companyInfo.linkedIn || '',
-        description: enrichment.companyInfo.description || '',
-        specialities: enrichment.companyInfo.specialities || [],
-        salesIntelligence: {
-          ...intelligence,
-          bestContactTime: 'Tuesday-Thursday, 10am-2pm EST',
-          decisionMakers,
-        },
-      };
+    // Get user identifier for rate limiting
+    const identifier = getUserIdentifier(userId, ip);
+
+    // Check rate limit AFTER validation (only consume quota for valid requests)
+    const rateLimitInfo = await checkSearchRateLimit(identifier);
+
+    log.request('POST', '/api/search-contractors', { filters, userId, ip });
+
+    // Add search job to queue
+    let job;
+    try {
+      job = await addSearchJob(filters);
+    } catch (error) {
+      throw new JobError(
+        'Failed to create search job',
+        'unknown',
+        true
+      );
+    }
+
+    log.info('Search job created', {
+      jobId: job.id,
+      filters,
+      userId,
     });
 
-    console.log(`Returning ${leads.length} enriched leads`);
-
-    // Step 5: Save to database
-    try {
-      console.log('Saving leads to database...');
-      await batchInsertEnrichedLeads(leads);
-
-      // Save search record
-      await saveSearch(filters, contractResults.length, companies.length);
-
-      console.log('✅ Leads saved to database');
-    } catch (dbError) {
-      console.error('Error saving to database:', dbError);
-      // Continue even if DB save fails - don't block the response
-    }
-
-    return NextResponse.json({ leads });
-  } catch (error) {
-    console.error('Error in search-contractors API:', error);
+    // Return job ID with rate limit headers
     return NextResponse.json(
-      { error: 'Failed to search contractors' },
-      { status: 500 }
+      {
+        jobId: job.id,
+        status: 'queued',
+        message: 'Search job created successfully. Poll /api/jobs/:jobId for status.',
+      },
+      {
+        headers: getRateLimitHeaders(rateLimitInfo),
+      }
     );
+  } catch (error) {
+    return handleAPIError(error, { endpoint: 'search-contractors' });
   }
 }

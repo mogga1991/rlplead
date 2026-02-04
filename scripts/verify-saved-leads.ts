@@ -36,7 +36,7 @@ async function verifySavedLeads() {
       console.log(`   🏷️  Tags: ${lead.tags?.join(', ') || 'None'}`);
       console.log(`   📊 Status: ${lead.status || 'N/A'}`);
       console.log(`   ⭐ Priority: ${lead.priority || 'N/A'}`);
-      console.log(`   💰 Lease Value: $${parseFloat(lead.company.totalAwards).toLocaleString()}`);
+  console.log(`   💰 Lease Value: $${Number(lead.company.totalAwards).toLocaleString()}`);
       console.log(`   👥 Contacts: ${lead.company.contacts.length}`);
     });
 

@@ -6,24 +6,35 @@ import { DetailPanel } from '@/components/layout/DetailPanel';
 import { SearchBar } from '@/components/search/SearchBar';
 import { FilterRow } from '@/components/search/FilterRow';
 import { ResultsTable } from '@/components/results/ResultsTable';
+import { SearchProgress } from '@/components/search/SearchProgress';
+import { ErrorAlert } from '@/components/ui/ErrorAlert';
 import { EnrichedLead, SearchFilters } from '@/lib/types';
 import { exportToCSV, downloadFile } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Download } from 'lucide-react';
+
+interface APIError {
+  error: string;
+  code: string;
+  canRetry: boolean;
+}
 
 export default function Home() {
   const [selectedLead, setSelectedLead] = useState<EnrichedLead | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>({});
   const [leads, setLeads] = useState<EnrichedLead[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [searching, setSearching] = useState(false);
+  const [currentJobId, setCurrentJobId] = useState<string | null>(null);
+  const [error, setError] = useState<APIError | null>(null);
 
   const handleSearch = async () => {
-    setLoading(true);
+    setSearching(true);
     setError(null);
+    setLeads([]); // Clear previous results
 
     try {
+      // Start background job
       const response = await fetch('/api/search-contractors', {
         method: 'POST',
         headers: {
@@ -32,18 +43,57 @@ export default function Home() {
         body: JSON.stringify(filters),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to search contractors');
+        setError({
+          error: data.error || 'Failed to start search',
+          code: data.code || 'UNKNOWN_ERROR',
+          canRetry: data.canRetry ?? true,
+        });
+        setSearching(false);
+        return;
       }
 
-      const data = await response.json();
-      setLeads(data.leads || []);
+      setCurrentJobId(data.jobId);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error('Search error:', err);
-    } finally {
-      setLoading(false);
+      setError({
+        error: err instanceof Error ? err.message : 'An error occurred',
+        code: 'NETWORK_ERROR',
+        canRetry: true,
+      });
+      setSearching(false);
     }
+  };
+
+  const handleSearchComplete = (result: any) => {
+    setLeads(result.leads || []);
+    setSearching(false);
+    setCurrentJobId(null);
+  };
+
+  const handleSearchError = (errorMessage: string) => {
+    setError({
+      error: errorMessage,
+      code: 'JOB_ERROR',
+      canRetry: true,
+    });
+    setSearching(false);
+    setCurrentJobId(null);
+  };
+
+  const handleSearchCancel = () => {
+    setSearching(false);
+    setCurrentJobId(null);
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    handleSearch();
+  };
+
+  const handleDismissError = () => {
+    setError(null);
   };
 
   const handleExportCSV = () => {
@@ -69,9 +119,23 @@ export default function Home() {
           />
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
+            <ErrorAlert
+              error={error.error}
+              title="Search Error"
+              canRetry={error.canRetry}
+              onRetry={handleRetry}
+              onDismiss={handleDismissError}
+            />
+          )}
+
+          {/* Show progress while searching */}
+          {searching && currentJobId && (
+            <SearchProgress
+              jobId={currentJobId}
+              onComplete={handleSearchComplete}
+              onError={handleSearchError}
+              onCancel={handleSearchCancel}
+            />
           )}
 
           {leads.length > 0 && (
@@ -91,7 +155,7 @@ export default function Home() {
             leads={leads}
             selectedLead={selectedLead}
             onSelectLead={setSelectedLead}
-            loading={loading}
+            loading={searching}
           />
         </div>
       </MainContent>

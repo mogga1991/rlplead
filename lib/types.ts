@@ -209,6 +209,9 @@ export interface EnrichedLead {
     // Best Contact Strategy
     bestContactTime: string;
     decisionMakers: Contact[];
+    // Optional next step recommendations and competitor insights (added to match scripts)
+    nextBestAction?: string;
+    competitorInsights?: string[];
   };
 }
 

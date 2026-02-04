@@ -9,14 +9,16 @@ module.exports = {
     extend: {
       colors: {
         'fed-green': {
-          50: '#f0f5f0',
-          100: '#d9e5d9',
-          200: '#b3cab3',
-          500: '#4a5d4a',
-          700: '#2d3d2d',
-          900: '#1a2e1a',
+          50: '#f5f3ff',
+          100: '#ede9fe',
+          200: '#ddd6fe',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#4c1d95',
+          800: '#3b0764',
+          900: '#2e1065',
         },
-        'cream': '#f8f7f4',
+        'cream': '#faf9f7',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

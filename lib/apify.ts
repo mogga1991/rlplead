@@ -1,5 +1,6 @@
 import { ApifyClient } from 'apify-client';
 import { Contact } from './types';
+import { getCached, setCache, generateCacheKey, CachePrefix, CacheTTL } from './cache';
 
 // Initialize Apify client
 let apifyClient: ApifyClient | null = null;
@@ -87,6 +88,30 @@ export async function enrichCompanyContactsWithApify(
   try {
     console.log(`Enriching ${companyNames.length} companies with Apify...`);
 
+    // Check cache for each company first
+    const enrichedData = new Map<string, { contacts: Contact[]; companyInfo: any }>();
+    const companiesToEnrich: string[] = [];
+
+    for (const companyName of companyNames) {
+      const cacheKey = generateCacheKey(CachePrefix.ENRICHMENT, { company: companyName });
+      const cached = await getCached<{ contacts: Contact[]; companyInfo: any }>(cacheKey);
+
+      if (cached) {
+        console.log(`Cache hit for enrichment: ${companyName}`);
+        enrichedData.set(companyName, cached);
+      } else {
+        companiesToEnrich.push(companyName);
+      }
+    }
+
+    // If all companies were cached, return early
+    if (companiesToEnrich.length === 0) {
+      console.log('All companies found in cache');
+      return enrichedData;
+    }
+
+    console.log(`Enriching ${companiesToEnrich.length} uncached companies...`);
+
     // Strategy 1: Try using Apollo People Leads Scraper
     // This searches for people at specific organizations
     // Target real estate/leasing decision makers
@@ -111,7 +136,7 @@ export async function enrichCompanyContactsWithApify(
     ];
 
     const input = {
-      searchQuery: companyNames.slice(0, 10), // Limit to first 10 companies
+      searchQuery: companiesToEnrich.slice(0, 10), // Limit to first 10 companies
       maxResults: 3, // Get up to 3 contacts per company
       includeEmails: true,
       includePhones: true,
@@ -133,10 +158,7 @@ export async function enrichCompanyContactsWithApify(
     console.log(`Retrieved ${items.length} results from Apify`);
 
     // Transform results into our format
-    const enrichedData = new Map<
-      string,
-      { contacts: Contact[]; companyInfo: any }
-    >();
+    // Note: enrichedData is already declared above with cached results
 
     // Group results by company
     const companiesMap = new Map<string, ApifyContactResult[]>();
@@ -161,11 +183,11 @@ export async function enrichCompanyContactsWithApify(
       return { firstName, lastName };
     };
 
-    // Transform to our Contact format
+    // Transform to our Contact format and cache results
     companiesMap.forEach((contacts, companyName) => {
       const transformedContacts: Contact[] = contacts.map((contact) => {
         const fullName = contact.full_name || contact.name || '';
-        const { firstName, lastName } = contact.first_name || contact.firstName
+        const { firstName, lastName} = contact.first_name || contact.firstName
           ? {
               firstName: contact.first_name || contact.firstName || '',
               lastName: contact.last_name || contact.lastName || ''
@@ -190,7 +212,7 @@ export async function enrichCompanyContactsWithApify(
       });
 
       const firstContact = contacts[0];
-      enrichedData.set(companyName, {
+      const enrichmentData = {
         contacts: transformedContacts,
         companyInfo: {
           size: '',
@@ -200,6 +222,14 @@ export async function enrichCompanyContactsWithApify(
           description: '',
           specialities: [],
         },
+      };
+
+      enrichedData.set(companyName, enrichmentData);
+
+      // Cache the enrichment data for this company
+      const cacheKey = generateCacheKey(CachePrefix.ENRICHMENT, { company: companyName });
+      setCache(cacheKey, enrichmentData, CacheTTL.ENRICHMENT_DATA).catch((error) => {
+        console.warn(`Failed to cache enrichment for ${companyName}:`, error);
       });
     });
 

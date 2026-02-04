@@ -1,7 +1,95 @@
 import { db } from './index';
-import { companies, contacts, contracts, searches, savedLeads } from './schema';
+import { companies, contacts, contracts, searches, savedLeads, users } from './schema';
 import { eq, desc, and, sql } from 'drizzle-orm';
+import { hash } from 'bcryptjs';
 import type { EnrichedLead } from '@/lib/types';
+
+// ============================================================================
+// USER AUTHENTICATION QUERIES
+// ============================================================================
+
+/**
+ * Get user by email for authentication
+ */
+export async function getUserByEmail(email: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email.toLowerCase()),
+  });
+  return user;
+}
+
+/**
+ * Get user by ID
+ */
+export async function getUserById(id: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, id),
+  });
+  return user;
+}
+
+/**
+ * Create a new user with hashed password
+ */
+export async function createUser(data: {
+  email: string;
+  password: string;
+  name?: string;
+}) {
+  const passwordHash = await hash(data.password, 12);
+  const userId = `user-${Date.now()}`;
+
+  const result = await db
+    .insert(users)
+    .values({
+      id: userId,
+      email: data.email.toLowerCase(),
+      name: data.name || null,
+      passwordHash,
+      role: 'sales', // Default role
+      preferences: {},
+      createdAt: new Date(),
+    })
+    .returning();
+
+  return result[0];
+}
+
+/**
+ * Update user's last login timestamp
+ */
+export async function updateUserLastLogin(userId: string) {
+  await db
+    .update(users)
+    .set({ lastLoginAt: new Date() })
+    .where(eq(users.id, userId));
+}
+
+/**
+ * Check if email already exists
+ */
+export async function emailExists(email: string): Promise<boolean> {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email.toLowerCase()),
+    columns: { id: true },
+  });
+  return !!user;
+}
+
+/**
+ * Update user password
+ */
+export async function updateUserPassword(userId: string, newPassword: string) {
+  const passwordHash = await hash(newPassword, 12);
+  await db
+    .update(users)
+    .set({ passwordHash })
+    .where(eq(users.id, userId));
+}
+
+// ============================================================================
+// COMPANY & LEAD QUERIES
+// ============================================================================
 
 /**
  * Save or update a company with its intelligence data
@@ -272,6 +360,25 @@ export async function getSavedLeadsForUser(userId: string) {
           contacts: true,
         },
       },
+    },
+    orderBy: [desc(savedLeads.savedAt)],
+  });
+
+  return leads;
+}
+
+/**
+ * Get all saved leads (globally accessible)
+ */
+export async function getAllSavedLeads() {
+  const leads = await db.query.savedLeads.findMany({
+    with: {
+      company: {
+        with: {
+          contacts: true,
+        },
+      },
+      user: true, // Include user info to see who saved it
     },
     orderBy: [desc(savedLeads.savedAt)],
   });

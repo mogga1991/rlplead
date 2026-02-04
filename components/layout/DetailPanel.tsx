@@ -228,68 +228,115 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({ lead, onClose }) => {
           </div>
         </Card>
 
-        {/* Primary Contact */}
+        {/* Primary Contact - Large Photo Card (like reference design) */}
         {primaryContact && (
-          <Card padding="md">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Primary Contact</h3>
-            <div className="flex items-start gap-3">
-              {/* Contact Avatar */}
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+          <Card padding="lg" className="bg-[#f8f7f4]">
+            {/* Large Profile Photo */}
+            <div className="flex flex-col items-center mb-4">
+              <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center mb-3 ring-4 ring-white shadow-lg">
                 {primaryContact.photoUrl ? (
                   <img
                     src={primaryContact.photoUrl}
                     alt={primaryContact.name}
                     className="w-full h-full object-cover"
                   />
-                ) : primaryContact.linkedIn || primaryContact.linkedinUrl ? (
-                  <a
-                    href={primaryContact.linkedIn || primaryContact.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full h-full flex items-center justify-center text-blue-700 font-semibold hover:bg-blue-200 transition-colors"
-                  >
-                    {primaryContact.firstName?.[0] || primaryContact.name[0]}
-                    {primaryContact.lastName?.[0] || primaryContact.name.split(' ')[1]?.[0] || ''}
-                  </a>
                 ) : (
-                  <span className="text-blue-700 font-semibold">
+                  <span className="text-gray-500 font-bold text-2xl">
                     {primaryContact.firstName?.[0] || primaryContact.name[0]}
                     {primaryContact.lastName?.[0] || primaryContact.name.split(' ')[1]?.[0] || ''}
                   </span>
                 )}
               </div>
-              <div className="space-y-2 flex-1">
-                <div>
-                  <p className="font-medium text-gray-900">{primaryContact.name}</p>
-                  <p className="text-sm text-gray-600">{primaryContact.title}</p>
-                  {(primaryContact.linkedIn || primaryContact.linkedinUrl) && (
-                    <a
-                      href={primaryContact.linkedIn || primaryContact.linkedinUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:text-blue-800 inline-block mt-1"
-                    >
-                      LinkedIn Profile →
-                    </a>
-                  )}
-                </div>
-                {primaryContact.email && (
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-gray-400" />
-                    <a
-                      href={`mailto:${primaryContact.email}`}
-                      className="text-sm text-fed-green-700 hover:text-fed-green-900"
-                    >
-                      {primaryContact.email}
-                    </a>
-                  </div>
-                )}
-                {primaryContact.phone && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-700">{primaryContact.phone}</span>
-                  </div>
+
+              {/* Social Links */}
+              <div className="flex items-center gap-3 mb-3">
+                {(primaryContact.linkedIn || primaryContact.linkedinUrl) && (
+                  <a
+                    href={primaryContact.linkedIn || primaryContact.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-full bg-[#0077B5] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  >
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </a>
                 )}
               </div>
+
+              {/* Name and Title */}
+              <h3 className="text-xl font-bold text-gray-900 text-center">{primaryContact.name}</h3>
+              <p className="text-sm text-fed-green-700 font-medium text-center">{lead.company.companyName}</p>
+              <p className="text-sm text-gray-600 text-center mt-1">{primaryContact.title}</p>
+            </div>
+
+            {/* Contact Quick Stats */}
+            <div className="space-y-2 pt-3 border-t border-gray-200">
+              {lead.companySize && (
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm text-gray-700">{lead.companySize}</span>
+                </div>
+              )}
+              {primaryContact.email && (
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-gray-400" />
+                  <a
+                    href={`mailto:${primaryContact.email}`}
+                    className="text-sm text-fed-green-700 hover:text-fed-green-900"
+                  >
+                    {primaryContact.email}
+                  </a>
+                </div>
+              )}
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-gray-400" />
+                <span className="text-sm text-gray-700">{lead.company.primaryLocation}</span>
+              </div>
+            </div>
+
+            {/* Description/Bio if available */}
+            {lead.description && (
+              <div className="mt-3 pt-3 border-t border-gray-200">
+                <p className="text-sm text-gray-600 line-clamp-3">{lead.description}</p>
+              </div>
+            )}
+
+            {/* Functional Areas / Specialities */}
+            {lead.specialities && lead.specialities.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-gray-200">
+                <p className="text-xs font-semibold text-gray-700 mb-2">Functional area</p>
+                <div className="flex gap-1 flex-wrap">
+                  {lead.specialities.slice(0, 4).map((speciality, index) => (
+                    <Badge key={index} variant="outline" size="sm" className="text-xs bg-white">
+                      {speciality}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="mt-4 pt-3 border-t border-gray-200 flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                icon={FileDown}
+                className="flex-1"
+                onClick={() => alert('Export PDF coming soon!')}
+              >
+                Export PDF
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                icon={Send}
+                iconPosition="right"
+                className="flex-1"
+                onClick={() => window.location.href = `mailto:${primaryContact.email}`}
+              >
+                Email
+              </Button>
             </div>
           </Card>
         )}

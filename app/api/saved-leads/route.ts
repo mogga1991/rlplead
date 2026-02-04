@@ -1,69 +1,79 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveLeadForUser, getSavedLeadsForUser } from '@/db/queries';
+import { auth } from '@/lib/auth';
+import { saveLeadForUser, getSavedLeadsForUser, getAllSavedLeads } from '@/db/queries';
+import { handleAPIError } from '@/lib/error-handler';
+import { AuthenticationError, ValidationError, DatabaseError } from '@/lib/errors';
+import { savedLeadSchema, getValidationErrorMessage, getValidationErrorField } from '@/lib/validation';
+import { checkCSRF } from '@/lib/csrf';
 
 /**
  * GET /api/saved-leads
- * Get all saved leads for a user
+ * Get all saved leads (globally accessible to all users)
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId') || 'user-admin-default';
+    const session = await auth();
 
-    const savedLeads = await getSavedLeadsForUser(userId);
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
+    }
+
+    // Get ALL saved leads (not filtered by user - globally accessible)
+    const savedLeads = await getAllSavedLeads();
 
     return NextResponse.json({ savedLeads, count: savedLeads.length });
   } catch (error) {
-    console.error('Error fetching saved leads:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch saved leads' },
-      { status: 500 }
-    );
+    return handleAPIError(error, { endpoint: 'saved-leads/get' });
   }
 }
 
 /**
  * POST /api/saved-leads
- * Save a lead for a user
+ * Save a lead for authenticated user
+ * CSRF Protection: Required for all POST requests
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const {
-      companyId,
-      userId = 'default-user',
-      listName,
-      tags,
-      status,
-      priority,
-      notes,
-      nextAction,
-      nextActionDate,
-    } = body;
+    // CSRF validation FIRST
+    await checkCSRF(request);
 
-    if (!companyId) {
-      return NextResponse.json(
-        { error: 'companyId is required' },
-        { status: 400 }
-      );
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
 
-    const savedLead = await saveLeadForUser(companyId, userId, {
-      listName,
-      tags,
-      status,
-      priority,
-      notes,
-      nextAction,
-      nextActionDate: nextActionDate ? new Date(nextActionDate) : undefined,
+    // Parse request body
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch (error) {
+      throw new ValidationError('Invalid request body. Expected JSON.');
+    }
+
+    // Validate with Zod schema
+    const validationResult = savedLeadSchema.safeParse(rawBody);
+
+    if (!validationResult.success) {
+      const errorMessage = getValidationErrorMessage(validationResult.error);
+      const errorField = getValidationErrorField(validationResult.error);
+      throw new ValidationError(errorMessage, errorField);
+    }
+
+    const validatedData = validationResult.data;
+
+    const savedLead = await saveLeadForUser(validatedData.companyId, session.user.id, {
+      listName: validatedData.listName,
+      tags: validatedData.tags,
+      status: validatedData.status,
+      priority: validatedData.priority,
+      notes: validatedData.notes,
+      nextAction: validatedData.nextAction,
+      nextActionDate: validatedData.nextActionDate ? new Date(validatedData.nextActionDate) : undefined,
     });
 
     return NextResponse.json({ lead: savedLead });
   } catch (error) {
-    console.error('Error saving lead:', error);
-    return NextResponse.json(
-      { error: 'Failed to save lead' },
-      { status: 500 }
-    );
+    return handleAPIError(error, { endpoint: 'saved-leads/post' });
   }
 }

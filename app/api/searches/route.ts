@@ -1,17 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
 import { getRecentSearches } from '@/db/queries';
 
 /**
  * GET /api/searches
- * Get recent search history
+ * Get recent search history for authenticated user
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId') || undefined;
     const limit = parseInt(searchParams.get('limit') || '10');
 
-    const searches = await getRecentSearches(userId, limit);
+    const searches = await getRecentSearches(session.user.id, limit);
 
     return NextResponse.json({ searches, count: searches.length });
   } catch (error) {

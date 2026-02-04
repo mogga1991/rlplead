@@ -111,6 +111,8 @@ async function importLessors() {
         salesIntelligence: {
           ...salesIntelligence,
           bestContactTime: 'Business Hours',
+          // Provide defaults for optional/expected fields
+          decisionMakers: [],
           nextBestAction: 'Research company and prepare outreach',
           competitorInsights: [],
         },
@@ -157,8 +159,9 @@ async function importLessors() {
           listName: 'GSA Lessors',
           tags: ['GSA', 'Real Estate', 'Import'],
           status: 'new',
-          priority: result.company.opportunityScore >= 10 ? 'high' : 'medium',
-          notes: `Auto-imported GSA lessor with $${parseFloat(result.company.totalAwards).toLocaleString()} in lease value`,
+          // Guard against null/undefined opportunityScore
+          priority: (result.company.opportunityScore ?? 0) >= 10 ? 'high' : 'medium',
+          notes: `Auto-imported GSA lessor with $${Number(result.company.totalAwards).toLocaleString()} in lease value`,
         });
         savedCount++;
       } catch (error) {
@@ -175,7 +178,7 @@ async function importLessors() {
     results.slice(0, 10).forEach((result, idx) => {
       console.log(`\n${idx + 1}. ${result.company.name}`);
       console.log(`   🆔 ID: ${result.company.id}`);
-      console.log(`   💰 Total Lease Value: $${parseFloat(result.company.totalAwards).toLocaleString()}`);
+  console.log(`   💰 Total Lease Value: $${Number(result.company.totalAwards).toLocaleString()}`);
       console.log(`   📑 Number of Leases: ${result.company.contractCount}`);
       console.log(`   📊 Opportunity Score: ${result.company.opportunityScore}/100`);
       console.log(`   🤝 Relationship: ${result.company.relationshipStrength}`);
