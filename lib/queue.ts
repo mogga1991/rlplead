@@ -12,9 +12,11 @@ const redisConfig = {
   host: process.env.REDIS_HOST || 'localhost',
   port: parseInt(process.env.REDIS_PORT || '6379'),
   maxRetriesPerRequest: null, // Required for BullMQ
+  lazyConnect: true, // Don't connect during build
+  enableOfflineQueue: false, // Fail fast if not connected
 };
 
-// Create Redis connection
+// Create Redis connection (lazy - won't connect until first use)
 export const redisConnection = new Redis(redisConfig);
 
 // Test connection
@@ -23,7 +25,10 @@ redisConnection.on('connect', () => {
 });
 
 redisConnection.on('error', (error) => {
-  log.error('Redis connection error', error);
+  // Only log in non-build environments
+  if (process.env.NODE_ENV !== 'production' || process.env.REDIS_URL) {
+    log.error('Redis connection error', error);
+  }
 });
 
 /**

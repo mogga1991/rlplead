@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCompaniesWithContacts, searchCompanies } from '@/db/queries';
 
+// Force dynamic rendering (uses request.url)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/companies
  * Retrieve companies from database with optional filters

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getOrCreateCSRFToken } from '@/lib/csrf';
 import { handleAPIError } from '@/lib/error-handler';
 
+// Force dynamic rendering (uses cookies)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/csrf-token
  * Returns a CSRF token for the client to include in state-changing requests

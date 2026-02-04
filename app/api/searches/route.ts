@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getRecentSearches } from '@/db/queries';
 
+// Force dynamic rendering (uses auth/headers)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/searches
  * Get recent search history for authenticated user
