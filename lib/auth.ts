@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { getUserByEmail, updateUserLastLogin } from '@/db/queries';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true, // Required for production deployments
   providers: [
     Credentials({
       name: 'credentials',
